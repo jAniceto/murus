@@ -18,45 +18,12 @@
   </h1>
 
   <h2>What Is Your Focus For Today?</h2>
-  <h2 id="photo-dir" contenteditable="true"></h2>
+  <h2 id="album" contenteditable="true"></h2>
 
   <script src="js/main.js"></script>
-
   <script src="https://apis.google.com/js/api.js"></script>
-  <script>
-    /**
-     * Sample JavaScript code for photoslibrary.mediaItems.search
-     * See instructions for running APIs Explorer code samples locally:
-     * https://developers.google.com/explorer-help/guides/code_samples#javascript
-     */
-
-    function authenticate() {
-      return gapi.auth2.getAuthInstance()
-          .signIn({scope: "https://www.googleapis.com/auth/photoslibrary https://www.googleapis.com/auth/photoslibrary.readonly https://www.googleapis.com/auth/photoslibrary.readonly.appcreateddata"})
-          .then(function() { console.log("Sign-in successful"); },
-                function(err) { console.error("Error signing in", err); });
-    }
-    function loadClient() {
-      gapi.client.setApiKey("AIzaSyBginFTjjEIjb51YllaHWoivO7DMXAeOoE");
-      return gapi.client.load("https://content.googleapis.com/discovery/v1/apis/photoslibrary/v1/rest")
-          .then(function() { console.log("GAPI client loaded for API"); },
-                function(err) { console.error("Error loading GAPI client for API", err); });
-    }
-    // Make sure the client is loaded and sign-in is complete before calling this method.
-    function execute() {
-      return gapi.client.photoslibrary.mediaItems.search({
-        "resource": {}
-      })
-          .then(function(response) {
-                  // Handle the results here (response.result has the parsed body).
-                  console.log("Response", response);
-                },
-                function(err) { console.error("Execute error", err); });
-    }
-    gapi.load("client:auth2", function() {
-      gapi.auth2.init({client_id: "862825391225-u4a78auodj47r1b4kdh4hb35u27ncqrs.apps.googleusercontent.com"});
-    });
-  </script>
+  <script src="js/photos.js"></script>
+  
   <button onclick="authenticate().then(loadClient)">authorize and load</button>
   <button onclick="execute()">execute</button>
 

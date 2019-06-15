@@ -1,8 +1,8 @@
 // DOM Elements
 const time = document.getElementById('time'),
   greeting = document.getElementById('greeting'),
-  name = document.getElementById('name'),
-  focus = document.getElementById('photo-dir');
+  name = document.getElementById('name');
+  // focus = document.getElementById('photo-dir');
 
 // Options
 const showAmPm = false;
@@ -44,7 +44,7 @@ function setBgGreet() {
     // Morning
     document.body.style.backgroundImage = "url('https://i.ibb.co/7vDLJFb/morning.jpg')";
     greeting.textContent = 'Good Morning, ';
-  } else if (hour < 18) {
+  } else if (hour < 20) {
     // Afternoon
     document.body.style.backgroundImage = "url('https://i.ibb.co/3mThcXc/afternoon.jpg')";
     greeting.textContent = 'Good Afternoon, ';
@@ -79,34 +79,34 @@ function setName(e) {
 }
 
 // Get Focus
-function getFocus() {
-  if (localStorage.getItem('focus') === null) {
-    focus.textContent = '[Enter Focus]';
-  } else {
-    focus.textContent = localStorage.getItem('focus');
-  }
-}
+// function getFocus() {
+//   if (localStorage.getItem('focus') === null) {
+//     focus.textContent = '[Enter Focus]';
+//   } else {
+//     focus.textContent = localStorage.getItem('focus');
+//   }
+// }
 
 // Set Focus
-function setFocus(e) {
-  if (e.type === 'keypress') {
-    // Make sure enter is pressed
-    if (e.which == 13 || e.keyCode == 13) {
-      localStorage.setItem('focus', e.target.innerText);
-      focus.blur();
-    }
-  } else {
-    localStorage.setItem('focus', e.target.innerText);
-  }
-}
+// function setFocus(e) {
+//   if (e.type === 'keypress') {
+//     // Make sure enter is pressed
+//     if (e.which == 13 || e.keyCode == 13) {
+//       localStorage.setItem('focus', e.target.innerText);
+//       focus.blur();
+//     }
+//   } else {
+//     localStorage.setItem('focus', e.target.innerText);
+//   }
+// }
 
 name.addEventListener('keypress', setName);
 name.addEventListener('blur', setName);
-focus.addEventListener('keypress', setFocus);
-focus.addEventListener('blur', setFocus);
+// focus.addEventListener('keypress', setFocus);
+// focus.addEventListener('blur', setFocus);
 
 // Run
 showTime();
 setBgGreet();
 getName();
-getFocus();
+// getFocus();
