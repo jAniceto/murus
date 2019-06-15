@@ -36,14 +36,12 @@
           .then(function() { console.log("Sign-in successful"); },
                 function(err) { console.error("Error signing in", err); });
     }
-
     function loadClient() {
-      gapi.client.setApiKey("AIzaSyDj4iL7mk6KY0vcNIeDuHaYfXViubzzqrM");
+      gapi.client.setApiKey("AIzaSyBginFTjjEIjb51YllaHWoivO7DMXAeOoE");
       return gapi.client.load("https://content.googleapis.com/discovery/v1/apis/photoslibrary/v1/rest")
           .then(function() { console.log("GAPI client loaded for API"); },
                 function(err) { console.error("Error loading GAPI client for API", err); });
     }
-
     // Make sure the client is loaded and sign-in is complete before calling this method.
     function execute() {
       return gapi.client.photoslibrary.mediaItems.search({
@@ -55,9 +53,8 @@
                 },
                 function(err) { console.error("Execute error", err); });
     }
-
     gapi.load("client:auth2", function() {
-      gapi.auth2.init({client_id: "989985083655-cihhud6l06p69p5t816ei9kgtq9ickgm.apps.googleusercontent.com"});
+      gapi.auth2.init({client_id: "862825391225-u4a78auodj47r1b4kdh4hb35u27ncqrs.apps.googleusercontent.com"});
     });
   </script>
   <button onclick="authenticate().then(loadClient)">authorize and load</button>
