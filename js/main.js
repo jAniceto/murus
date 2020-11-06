@@ -1,11 +1,17 @@
+// Option variables
+const accessKeyUnsplash = "2xFV2a2s7uQhCWhtDVLQ73tFhx-4VNO5p16NFpCQsdM";
+
+
 // DOM Elements
 const time = document.getElementById('time'),
   greeting = document.getElementById('greeting'),
   name = document.getElementById('name');
   // focus = document.getElementById('photo-dir');
 
+
 // Options
 const showAmPm = false;
+
 
 // Show Time
 function showTime() {
@@ -30,31 +36,77 @@ function showTime() {
   setTimeout(showTime, 1000);
 }
 
+
 // Add Zeros
 function addZero(n) {
   return (parseInt(n, 10) < 10 ? '0' : '') + n;
 }
 
-// Set Background and Greeting
-function setBgGreet() {
+
+// Set Greet
+function setGreet() {
   let today = new Date(),
-    hour = today.getHours();
+  hour = today.getHours();
 
   if (hour < 12) {
     // Morning
-    document.body.style.backgroundImage = "url('https://i.ibb.co/7vDLJFb/morning.jpg')";
     greeting.textContent = 'Good Morning, ';
   } else if (hour < 20) {
     // Afternoon
-    document.body.style.backgroundImage = "url('https://i.ibb.co/3mThcXc/afternoon.jpg')";
     greeting.textContent = 'Good Afternoon, ';
   } else {
     // Evening
-    document.body.style.backgroundImage = "url('https://i.ibb.co/924T2Wv/night.jpg')";
     greeting.textContent = 'Good Evening, ';
-    document.body.style.color = 'white';
+    // document.body.style.color = 'white';
   }
 }
+
+
+// Function to grab a random image from Unsplash
+function setBackgroundFromUnsplash() {
+  const http = new XMLHttpRequest();
+  const url = "https://api.unsplash.com/photos/random" + "?client_id=" + accessKeyUnsplash + "&orientation=landscape&query=nature";
+  http.open("GET", url);
+  http.send()
+
+  http.onreadystatechange=function() {
+    if (this.readyState==4 && this.status==200) {
+      const image = JSON.parse(http.responseText);
+      console.log(image['urls']);
+
+      // Apply background
+      document.body.style.backgroundImage = `url(${image['urls']['regular']})`.replace("w=1080", "w=1920"); // .replace("fit=max", "fit=clip")
+      // return image;
+    }
+  } 
+}
+
+
+// Set Background
+function setBackground(imgSource) {
+  if (imgSource == "unsplash") {
+    // Apply Unsplash image
+    setBackgroundFromUnsplash();
+    
+  } else {
+    // Apply default images depending on hour of the day
+    let today = new Date(),
+    hour = today.getHours();
+
+    if (hour < 12) {
+      // Morning
+      document.body.style.backgroundImage = "url('https://i.ibb.co/7vDLJFb/morning.jpg')";
+    } else if (hour < 20) {
+      // Afternoon
+      document.body.style.backgroundImage = "url('https://i.ibb.co/3mThcXc/afternoon.jpg')";
+    } else {
+      // Evening
+      document.body.style.backgroundImage = "url('https://i.ibb.co/924T2Wv/night.jpg')";
+      // document.body.style.color = 'white';
+    }
+  }
+}
+
 
 // Get Name
 function getName() {
@@ -64,6 +116,7 @@ function getName() {
     name.textContent = localStorage.getItem('name');
   }
 }
+
 
 // Set Name
 function setName(e) {
@@ -78,6 +131,7 @@ function setName(e) {
   }
 }
 
+
 // Get Focus
 // function getFocus() {
 //   if (localStorage.getItem('focus') === null) {
@@ -86,6 +140,7 @@ function setName(e) {
 //     focus.textContent = localStorage.getItem('focus');
 //   }
 // }
+
 
 // Set Focus
 // function setFocus(e) {
@@ -100,13 +155,36 @@ function setName(e) {
 //   }
 // }
 
+
 name.addEventListener('keypress', setName);
 name.addEventListener('blur', setName);
 // focus.addEventListener('keypress', setFocus);
 // focus.addEventListener('blur', setFocus);
 
-// Run
-showTime();
-setBgGreet();
-getName();
-// getFocus();
+
+// Function to grab a random image from Unsplash
+function getRandomImageFromUnsplash() {
+  const http = new XMLHttpRequest();
+  const url = "https://api.unsplash.com/photos/random" + "?client_id=" + accessKeyUnsplash;
+  http.open("GET", url);
+  http.send()
+
+  http.onreadystatechange=function() {
+    if (this.readyState==4 && this.status==200) {
+      const image = JSON.parse(http.responseText);
+      console.log(image);
+      return image;
+    }
+  } 
+}
+
+
+// Load extension options and run
+chrome.storage.sync.get(['imgSource'], function(result) {
+  showTime();
+  setGreet();
+  setBackground(result.imgSource);
+  getName();
+  // getFocus();
+});
+

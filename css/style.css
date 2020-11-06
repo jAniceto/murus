@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Overpass', sans-serif;
-    background-image: url('/img/black1.jpg');
+    /* background-image: url('/img/black1.jpg'); */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -14,6 +14,7 @@ body {
     text-align: center;
     height: 100vh;
     color: #ffffff;
+    background-size: cover;
 }
 
 #time {
