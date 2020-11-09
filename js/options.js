@@ -1,8 +1,10 @@
 // Saves options to chrome.storage
 function save_options() {
   var imgSource = document.getElementById('imgSource').value;
+  var showQuotes = document.getElementById('quotes').checked;
   chrome.storage.sync.set({
     imgSource: imgSource,
+    showQuotes: showQuotes,
   }, function() {
     // Update status to let user know options were saved.
     var status = document.getElementById('status');
@@ -18,8 +20,10 @@ function restore_options() {
   // Use default value imgSource = 'default'
   chrome.storage.sync.get({
     imgSource: 'default',
+    showQuotes: true
   }, function(items) {
     document.getElementById('imgSource').value = items.imgSource;
+    document.getElementById('quotes').checked = items.showQuotes;
   });
 }
 document.addEventListener('DOMContentLoaded', restore_options);

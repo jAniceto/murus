@@ -21,14 +21,35 @@ body {
     font-size: 10rem;
 }
 
-h1 {
+#clock {
     margin-bottom: 3rem;
 }
 
-h2 {
+#bgInfo {
+    position: absolute;
+    left: 1rem;
+    bottom: 1rem;
+    color: #ffffff;
+    opacity: 0.8;
+    text-decoration: none;
+}
+
+#bgInfo:hover {
+    text-decoration: underline;
+}
+
+#quote {
+    font-family: 'Playfair Display', serif;
+    position: absolute;
+    bottom: 1rem;
+    font-size: 1rem;
+    opacity: 0.8;
+}
+
+/* h2 {
     margin-bottom: 0.5rem;
     opacity: 0.6;
-}
+} */
 
 @media (max-width: 700px) {
     #time {
