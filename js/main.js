@@ -139,9 +139,8 @@ function setBackground(imgSource, subreddit) {
     if (getWithExpiry("redditBackgroundURL")) {
       // Apply saved image
       document.body.style.backgroundImage = getWithExpiry("redditBackgroundURL");
-      // document.body.style.backgroundImage = `url(${getWithExpiry("redditBackgroundURL")})`;
       bgInfo.textContent = localStorage.getItem('redditBackgroundDescription');;
-      bgInfo.href = localStorage.getItem('redditBackgroundDescription');;
+      bgInfo.href = localStorage.getItem('redditBackgroundSourceURL');;
     } else {
       // Apply new image
       setBackgroundFromReddit(subreddit);
