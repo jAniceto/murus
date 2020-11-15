@@ -5,6 +5,9 @@
   <title>Murus configuration</title>
 
   <style>
+    body {
+      margin: 1rem 1rem;
+    }
     .mt {
       margin-top: 2rem;
     }
@@ -15,15 +18,33 @@
 
 <h1>Murus configuration</h1>
 
+<!-- Time option -->
+<h4 class="mt">Time options</h4>
+<div>
+  <label>
+    <input type="checkbox" id="showAmPm">
+    Use a.m. / p.m.
+  </label>
+</div>
+
+
 <!-- Background option -->
-<p class="mt">Background source:</p>
+<h4 class="mt">Background options</h4>
+<p>Background source:</p>
 <select id="imgSource">
  <option value="default">Default</option>
  <option value="unsplash">Unsplash</option>
+ <option value="reddit">Reddit</option>
 </select>
 
+<p>Subreddit (if Reddit is the background source):</p>
+<input id="subreddit" type="text">
+<p><small>(will update on the next wallpaper change)</small></p>
+
+
 <!-- Show quotes option -->
-<div class="mt">
+<h4 class="mt">Quotes options</h4>
+<div>
   <label>
     <input type="checkbox" id="quotes" checked>
     Show quotes

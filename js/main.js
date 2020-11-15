@@ -13,12 +13,8 @@ const quotePhrase = document.querySelector('#quote .phrase');
 const quoteAuthor = document.querySelector('#quote .author');
 
 
-// Options
-const showAmPm = false;
-
-
 // Show Time
-function showTime() {
+function showTime(showAmPm) {
   let today = new Date(),
     hour = today.getHours(),
     min = today.getMinutes(),
@@ -37,7 +33,9 @@ function showTime() {
         time.innerHTML = `${hour}<span>:</span>${addZero(min)}`
     }
 
-  setTimeout(showTime, 1000);
+  setTimeout(function() {
+    showTime(showAmPm);
+  }, 1000);
 }
 
 
@@ -78,9 +76,10 @@ function setBackgroundFromUnsplash() {
       const image = JSON.parse(http.responseText);
       const unsplashBackgroundURL = `url(${image['urls']['regular']})`.replace("w=1080", "w=1920"); // .replace("fit=max", "fit=clip")
       const unsplashBackgroundDescription = `${image['location']['city'] ? image['location']['city'] : ''} \
-        ${image['location']['city'] ? ' ,' : ''} \ 
+        ${image['location']['city'] ? ', ' : ''} \ 
         ${image['location']['country'] ? image['location']['country'] : ''}`;
       const unsplashBackgroundSourceURL = image['links']['html'];
+      console.log(unsplashBackgroundDescription);
 
       // Apply background and info
       document.body.style.backgroundImage = unsplashBackgroundURL;
@@ -95,18 +94,59 @@ function setBackgroundFromUnsplash() {
 }
 
 
+// Function to grab a random image from Reddit
+function setBackgroundFromReddit(subreddit) {
+  fetch(`https://www.reddit.com/r/${subreddit}/top.json?t=day&limit=1`)
+  .then(function (res) {
+    return res.json(); // Convert the data into JSON
+  })
+  .then(function (data) {
+    const redditBackgroundURL = `url(${data["data"]["children"][0]["data"]["url"]})`;
+    const redditBackgroundDescription = "Source";
+    const redditBackgroundSourceURL = "https://www.reddit.com" + data["data"]["children"][0]["data"]["permalink"];
+    console.log(data); // Logs the data to the console
+    // Apply background and info
+    document.body.style.backgroundImage = redditBackgroundURL;
+    bgInfo.textContent = redditBackgroundDescription;
+    bgInfo.href = redditBackgroundSourceURL;
+    // Save background link and info to local storage
+    setWithExpiry("redditBackgroundURL", redditBackgroundURL, backgroundTTL)
+    localStorage.setItem('redditBackgroundDescription', redditBackgroundDescription);
+    localStorage.setItem('redditBackgroundSourceURL', redditBackgroundSourceURL);
+  })
+  .catch(function (err) {
+    console.log(err); // Log error if any
+  });
+}
+
+
 // Set Background
-function setBackground(imgSource) {
+function setBackground(imgSource, subreddit) {
   if (imgSource == "unsplash") {
     // Check if current image has expired
     if (getWithExpiry("unsplashBackgroundURL")) {
       // Apply saved image
       document.body.style.backgroundImage = getWithExpiry("unsplashBackgroundURL");
+      bgInfo.textContent = localStorage.getItem('unsplashBackgroundDescription');
+      bgInfo.href = localStorage.getItem('unsplashBackgroundSourceURL');;
     } else {
       // Apply new image
       setBackgroundFromUnsplash();
     }
     
+  } else if (imgSource == "reddit") {
+    // Check if current image has expired
+    if (getWithExpiry("redditBackgroundURL")) {
+      // Apply saved image
+      document.body.style.backgroundImage = getWithExpiry("redditBackgroundURL");
+      // document.body.style.backgroundImage = `url(${getWithExpiry("redditBackgroundURL")})`;
+      bgInfo.textContent = localStorage.getItem('redditBackgroundDescription');;
+      bgInfo.href = localStorage.getItem('redditBackgroundDescription');;
+    } else {
+      // Apply new image
+      setBackgroundFromReddit(subreddit);
+    }
+
   } else {
     // Apply default images depending on hour of the day
     let today = new Date(),
@@ -194,6 +234,7 @@ function getRandomQuote() {
       let randomNum = Math.floor(Math.random()*quote.length);
       quotePhrase.textContent = quote[randomNum]["text"];
       quoteAuthor.textContent = "— " + quote[randomNum]["author"];
+      quoteAuthor.textContent = quote[randomNum]["author"] ? "— " + quote[randomNum]["author"] : "— unknown";
     }
   } 
 }
@@ -232,10 +273,10 @@ function getWithExpiry(key) {
 }
 
 // Load extension options and run
-chrome.storage.sync.get(['imgSource', 'showQuotes'], function(result) {
-  showTime();
+chrome.storage.sync.get(['showAmPm', 'imgSource', 'subreddit', 'showQuotes'], function(result) {
+  showTime(result.showAmPm);
   setGreet();
-  setBackground(result.imgSource);
+  setBackground(result.imgSource, result.subreddit);
   getName();
   // getFocus();
   if (result.showQuotes) {
